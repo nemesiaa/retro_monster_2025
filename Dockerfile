@@ -37,32 +37,44 @@ COPY --from=composer:2.5 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 COPY . .
 
-# Copier le build Node
+# Copier le build Node (assets front-end)
 COPY --from=node-builder /app/public/build /var/www/html/public/build
 
+# Installation des dépendances Laravel
 RUN composer install --no-dev --optimize-autoloader
-
-# Permissions
+RUN mkdir -p storage/framework/cache
+RUN mkdir -p storage/framework/sessions
+RUN mkdir -p storage/framework/views
+RUN chmod -R 775 storage bootstrap/cache
 RUN chown -R www-data:www-data storage bootstrap/cache
 
-# ► 1) Créer le dossier de destination
+
+# Permissions pour le cache et le stockage
+RUN chmod -R 775 storage bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache
+
+# ► 1) Créer le dossier de destination pour les images
 RUN mkdir -p storage/app/public/images
 
-# ► 2) Copier les anciennes images (si le dossier public/images existe)
+# ► 2) Copier les anciennes images si elles existent
 RUN if [ -d "public/images" ]; then \
       cp -r public/images/* storage/app/public/images/ || true; \
     fi
 
-# ► 3) Supprimer l'ancien dossier public/images
+# ► 3) Supprimer l'ancien dossier public/images (il sera remplacé par un lien symbolique)
 RUN rm -rf public/images
 
-# ► 4) Créer le lien symbolique
+# ► 4) Créer le lien symbolique vers le stockage Laravel
 RUN ln -s /var/www/html/storage/app/public/images /var/www/html/public/images
 
-# ► 5) (Optionnel) php artisan storage:link
-RUN php artisan storage:link || true
+# ► 5) Vérifier que `APP_KEY` est bien généré (sinon Laravel peut planter)
+RUN php artisan key:generate --force || true
 
+# ► 6) Assurer que les migrations sont faites (facultatif mais recommandé)
+RUN php artisan migrate --force || true
+
+# Exposer le port 8080 (utilisé par Laravel)
 EXPOSE 8080
 
 # Commande de démarrage pour Laravel
-CMD  php artisan serve --host=0.0.0.0 --port=$PORT
+CMD php artisan serve --host=0.0.0.0 --port=8080

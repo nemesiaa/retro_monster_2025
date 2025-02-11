@@ -1,0 +1,18 @@
+node_modules
+vendor
+.env
+storage/*.log
+storage/*.key
+storage/debugbar
+storage/framework/cache
+storage/framework/sessions
+storage/framework/testing
+storage/framework/views
+storage/logs
+storage/oauth-private.key
+storage/oauth-public.key
+storage/app/public
+
+# Git
+.git
+.gitignore
