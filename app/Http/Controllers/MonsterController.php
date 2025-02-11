@@ -76,4 +76,17 @@ class MonsterController extends Controller
         }
     }
 
+    public function delete(int $id)
+    {
+        $monster = Monster::findOrFail($id);
+
+        if ($monster->image_url) {
+            Storage::delete('public/images/' . $monster->image_url);
+        }
+
+        $monster->delete();
+
+        return redirect()->route('monsters.index');
+    }
+
 }
