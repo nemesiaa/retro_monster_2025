@@ -6,9 +6,9 @@ x-data="{ open: false, loggedIn: true, userMenuOpen: false }"
   class="container mx-auto px-4 py-4 mb-16 flex justify-between items-center"
 >
   <div class="flex items-center">
-    <a href="#">
+    <a href="{{ route('home') }}">
       <img
-        src="images/Logo_RetroMonsters.png"
+        src="{{ asset('images/Logo_RetroMonsters.png') }}"
         alt="RetroMonsters Logo"
         class="h-32 mr-3 absolute"
         style="top: -28px"
@@ -26,7 +26,7 @@ x-data="{ open: false, loggedIn: true, userMenuOpen: false }"
   <div class="hidden md:flex items-center">
     <a
       class="text-gray-300 hover:text-white px-3 py-2 hover:bg-gray-700"
-      href="#"
+      href="{{ route('monsters.index') }}"
       >Monstres</a
     >
     <a
@@ -88,7 +88,7 @@ x-data="{ open: false, loggedIn: true, userMenuOpen: false }"
 <div x-show="open" class="md:hidden p-8">
   <a
     class="block bg-gray-900 text-white px-4 py-2 hover:bg-gray-700"
-    href="#"
+    href="{{ route('monsters.index') }}"
     >Monstres</a
   >
   <a
