@@ -8,6 +8,12 @@ use App\Http\Controllers\MonsterController;
 
 Route::get('/', [PagesController::class, 'homeAction'])->name('home');
 
+
+Route::get('/monster/{id}/edit', [MonsterController::class, 'edit'])
+    ->name('monster.edit');
+
+Route::put('/monster/{id}', [MonsterController::class, 'update'])
+    ->name('monster.update');
 Route::get('/monster/{id}/delete', [MonsterController::class, 'delete'])
     ->name('monster.delete');
 
