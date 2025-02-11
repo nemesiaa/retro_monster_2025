@@ -1,0 +1,12 @@
+services:
+    dev:
+        build:
+            context: .
+            dockerfile: Dockerfiledev
+        ports:
+            - "8081:8080"
+        volumes:
+            - .:/var/www/html
+        environment:
+            XDEBUG_MODE: develop,debug
+            XDEBUG_CLIENT_HOST: host.docker.internal

@@ -1,0 +1,46 @@
+# Étape 1 : Installer les dépendances PHP
+FROM php:8.3-fpm
+
+# Installer les extensions PHP nécessaires + Xdebug
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    libpq-dev \
+    libzip-dev \
+    libonig-dev \
+    curl \
+    vim \
+    && docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring zip opcache \
+    && pecl install xdebug && docker-php-ext-enable xdebug
+
+# # Configurer Xdebug pour le développement
+# RUN echo "xdebug.mode=develop,debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+#     && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+#     && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
+# Installer Node.js et npm
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && apt-get install -y nodejs
+
+# Installer Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Définir le répertoire de travail
+WORKDIR /var/www/html
+
+# Copier les fichiers de l'application
+COPY . .
+
+# Installer les dépendances PHP avec Composer
+RUN composer install
+
+# Installer les dépendances Node.js pour le développement
+RUN npm install
+
+# Configurer les permissions pour Laravel
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Exposer le port utilisé par Laravel
+EXPOSE 8080
+
+# Commande de démarrage pour Laravel en mode développement
+CMD php artisan serve --host=0.0.0.0 --port=8080

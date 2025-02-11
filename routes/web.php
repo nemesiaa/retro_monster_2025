@@ -14,3 +14,9 @@ Route::get('/monster/{id}/{slug}', [MonsterController::class, 'show'])
 Route::get('/monsters', 
 [MonsterController::class,'index'])
     ->name('monsters.index');
+
+Route::get('/monsters/create', [MonsterController::class, 'create'])
+->name('monsters.create');
+
+Route::post('/monsters', [MonsterController::class, 'store'])
+->name('monsters.store');

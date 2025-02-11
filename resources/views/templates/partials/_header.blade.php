@@ -31,7 +31,7 @@ x-data="{ open: false, loggedIn: true, userMenuOpen: false }"
     >
     <a
       class="text-gray-300 hover:text-white px-3 py-2 hover:bg-gray-700 active"
-      href="#"
+      href="{{ route('monsters.create') }}"
       >Ajouter un monstre</a
     >
     <!-- <a
@@ -93,7 +93,7 @@ x-data="{ open: false, loggedIn: true, userMenuOpen: false }"
   >
   <a
     class="block bg-gray-900 text-white px-4 py-2 hover:bg-gray-700"
-    href="#"
+    href="{{ route('monsters.create') }}"
     >Ajouter un monstre</a
   >
   <!-- <a
