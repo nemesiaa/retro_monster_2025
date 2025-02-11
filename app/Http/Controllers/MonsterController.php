@@ -19,4 +19,10 @@ class MonsterController extends Controller
 
         return view('monsters.monsters', compact('monsters'));
     }
+    public function show(int $id)
+    {
+        $monster = Monster::with(['type', 'rarety'])->findOrFail($id);
+
+        return view('monsters.show', compact('monster'));
+    }
 }
